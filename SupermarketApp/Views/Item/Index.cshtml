@@ -24,7 +24,11 @@
             </select>
             Item Name: 
             <input type="text" asp-for="SearchString"/>
+            Max Price: 
+            <input type="number" step=".01" asp-for="MaxPrice"/>           
             <input type="submit" value="Filter" class="btn btn-secondary" style="float:right;"/>
+            <input type="reset" value="Remove Filters" class="btn btn-default" style="float:right;"/>
+
         </p>
     </form>
 </div>

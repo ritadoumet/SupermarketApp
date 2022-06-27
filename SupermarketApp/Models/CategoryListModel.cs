@@ -8,5 +8,7 @@ namespace SupermarketApp.Models
         public SelectList Categories { get; set; }
         public string ItemCategory { get; set; }   
         public string SearchString { get; set; }
+
+        public double MaxPrice { get; set; }
     }
 }

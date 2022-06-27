@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SupermarketApp.Data;
 using SupermarketApp.Models;
 
-namespace SupermarketWeb.Controllers
+namespace SupermarketApp.Controllers
 {
     public class ItemController : Controller
     {
@@ -13,7 +13,7 @@ namespace SupermarketWeb.Controllers
             _db = db;
         }
 
-        public async Task<IActionResult> Index(string itemCategory, string searchString)
+        public async Task<IActionResult> Index(string itemCategory, string searchString, double maxPrice)
         {
             IQueryable<string> categoryQuery = from m in _db.Items orderby m.Category select m.Category;
 
@@ -27,6 +27,10 @@ namespace SupermarketWeb.Controllers
             if (!string.IsNullOrEmpty(itemCategory))
             {
                 items = items.Where(i => i.Category == itemCategory);
+            }
+            if (maxPrice > 0)
+            {
+                items = items.Where(i => i.Price < maxPrice);
             }
             var ItemCategoryListM = new CategoryListModel
             {
