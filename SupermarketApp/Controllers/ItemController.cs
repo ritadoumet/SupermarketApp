@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SupermarketApp.Data;
 using SupermarketApp.Models;
 
 namespace SupermarketWeb.Controllers
 {
-    [Authorize]
     public class ItemController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -14,10 +13,28 @@ namespace SupermarketWeb.Controllers
             _db = db;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string itemCategory, string searchString)
         {
-            IEnumerable<Item> objItemList = _db.Items;
-            return View(objItemList);
+            IQueryable<string> categoryQuery = from m in _db.Items orderby m.Category select m.Category;
+
+            var items = from m in _db.Items select m;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                items = items.Where(i => i.Name.Contains(searchString));
+
+            }
+            if (!string.IsNullOrEmpty(itemCategory))
+            {
+                items = items.Where(i => i.Category == itemCategory);
+            }
+            var ItemCategoryListM = new CategoryListModel
+            {
+                Categories = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await categoryQuery.Distinct().ToListAsync()),
+                Items = await items.ToListAsync()
+            };
+           
+            return View(ItemCategoryListM);
         }
 
         //Get
