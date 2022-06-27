@@ -1,0 +1,45 @@
+﻿@model Item
+
+<form method="post" asp-action="DeletePOST">
+    <input asp-for="Id" hidden/>
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">Delete Item</h2>
+            <hr/>
+        </div>
+        <div asp-validation-summary="All"></div>
+        <div class="mb-3">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" disabled class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Price"></label>
+            <input asp-for="Price" disabled class="form-control" />
+            
+        </div>
+        <div class="mb-3">
+            <label asp-for="Weight"></label>
+            <input asp-for="Weight" disabled class="form-control" />
+    
+        </div>
+        <div class="mb-3">
+            <label asp-for="Category"></label>
+            <select name="category" id="category" asp-for="Category" class="form-control" disabled>
+                  <option value="meatfish" selected>Meat & Fish</option>
+                  <option value="dairy">Dairy</option>
+                  <option value="veggiesfruit">Veggies & Fruit</option>
+                  <option value="bread">Bread</option>
+                  <option value="care">Care Products</option>
+            </select>
+      
+        </div>
+        <button type="submit" class="btn btn-danger" style="width:150px">Delete Item</button>
+        <a asp-controller="Item" asp-action="Index" class="btn btn-secondary" style="width:150px">Back to List</a>
+    </div>
+</form> 
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial"/>
+    }
+}
