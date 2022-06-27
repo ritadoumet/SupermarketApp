@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupermarketApp.Data;
 using SupermarketApp.Models;
 
 namespace SupermarketApp.Controllers
 {
+    [Authorize]
     public class ItemController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -41,11 +43,15 @@ namespace SupermarketApp.Controllers
             return View(ItemCategoryListM);
         }
 
+
+        [Authorize(Roles ="Admin")]
         //Get
         public IActionResult Create()
         {
             return View();
         }
+
+        [Authorize(Roles = "Admin")]
         //Get
         public IActionResult Edit(int? id)
         {
@@ -60,6 +66,8 @@ namespace SupermarketApp.Controllers
             }
             return View(itemFromDb);
         }
+
+        [Authorize(Roles = "Admin")]
         //Post
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -84,6 +92,8 @@ namespace SupermarketApp.Controllers
             }
             return View(obj);
         }
+
+        [Authorize(Roles = "Admin")]
         //Get
         public IActionResult Delete(int? id)
         {
@@ -98,6 +108,8 @@ namespace SupermarketApp.Controllers
             }
             return View(itemFromDb);
         }
+
+        [Authorize(Roles = "Admin")]
         //Post
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -115,6 +127,8 @@ namespace SupermarketApp.Controllers
             
             return View(obj);
         }
+
+        [Authorize(Roles = "Admin")]
         //Post
         [HttpPost]
         [ValidateAntiForgeryToken]
