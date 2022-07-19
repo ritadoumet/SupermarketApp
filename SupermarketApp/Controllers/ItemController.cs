@@ -39,7 +39,7 @@ namespace SupermarketApp.Controllers
                 Categories = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await categoryQuery.Distinct().ToListAsync()),
                 Items = await items.ToListAsync()
             };
-           
+
             return View(ItemCategoryListM);
         }
 
@@ -144,7 +144,7 @@ namespace SupermarketApp.Controllers
             {
                 ModelState.AddModelError("CustomCategoryError", "Invalid Category.");
             }
-          if (ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _db.Items.Add(obj);
                 _db.SaveChanges();
