@@ -161,7 +161,7 @@ namespace SupermarketApp.Controllers
                 _db.Orders.Add(Order);
                 _db.SaveChanges();
                 TempData["success"] = "Your order for $"+price+" was placed.";
-                RedirectToAction("Index", "Order");
+                
             }
             return View();
         }
