@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SupermarketApp.Data;
 
@@ -11,9 +12,10 @@ using SupermarketApp.Data;
 namespace SupermarketApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220814124947_order")]
+    partial class order
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -232,7 +234,7 @@ namespace SupermarketApp.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("OrderId")
+                    b.Property<int>("OrderID")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -247,7 +249,7 @@ namespace SupermarketApp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderID");
 
                     b.HasIndex("itemId");
 
@@ -358,17 +360,17 @@ namespace SupermarketApp.Data.Migrations
 
             modelBuilder.Entity("SupermarketApp.Models.CartItem", b =>
                 {
-                    b.HasOne("SupermarketApp.Models.Order", "Order")
+                    b.HasOne("SupermarketApp.Models.Order", null)
                         .WithMany("CartItems")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SupermarketApp.Models.Item", "item")
                         .WithMany()
                         .HasForeignKey("itemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Order");
 
                     b.Navigation("item");
                 });

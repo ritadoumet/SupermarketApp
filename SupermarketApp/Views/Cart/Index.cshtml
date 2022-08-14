@@ -15,6 +15,14 @@
     </div>
 
 </div>
+@if (!Model.Any())
+{
+    <h3>Your cart is empty.</h3>
+    <a casp-controller="Cart" asp-action="Item" class="btn btn-primary mx-2">Go to Items page</a>
+}
+else{
+
+
 <table class="table table-bordered table-striped" style="width:100%">
     <thead>
         <tr>
@@ -41,12 +49,14 @@
                       
                         <a casp-controller="Cart" asp-action="Edit" asp-route-itemid=@obj.Id class="btn btn-primary mx-2">Edit</a>
                         <a casp-controller="Cart" asp-action="Delete" asp-route-itemid=@obj.Id class="btn btn-danger mx-2">Remove</a>
-                       
                     </div>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+  <a casp-controller="Cart" asp-action="Order" class="btn btn-primary mx-2">Order</a>
 
 
+
+                    }

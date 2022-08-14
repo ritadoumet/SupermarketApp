@@ -20,10 +20,10 @@ namespace SupermarketApp.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var cartitems = _db.CartItems.Include("item");
+            var cartitems = _db.CartItems.Include("item").Include("Order");
             
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            cartitems = cartitems.Where(i => i.UserID == userId);
+            cartitems = cartitems.Where(i => (i.UserID == userId && i.Order==null));
 
             List<CartItem> Items = await cartitems.ToListAsync();
             return View(Items);
@@ -36,11 +36,18 @@ namespace SupermarketApp.Controllers
                 return NotFound();
             }
             var itemFromDb = _db.Items.Find(itemid);
+            var cartItems = _db.CartItems.Include("item").Include("Order");
             if (itemFromDb == null)
             {
                 return NotFound();
             }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            cartItems = cartItems.Where(c => (c.UserID == userId && c.item.Id == itemid && c.Order == null));
+            if (cartItems.Any())
+            {
+                TempData["success"] = "This item already exists in your cart. You can edit it from here:";
+                return RedirectToAction("Edit", "Cart", new {itemid = cartItems.First().Id});
+            }
             CartItem cartItem = new CartItem();
             cartItem.item = itemFromDb;
             cartItem.UserID = userId;
@@ -69,8 +76,8 @@ namespace SupermarketApp.Controllers
             {
                 return NotFound();
             }
-            var cartitems = _db.CartItems.Include("item");
-            var itemFromDb = cartitems.Where(c => c.Id == itemid).First();
+            var cartitems = _db.CartItems.Include("item").Include("Order");
+            var itemFromDb = cartitems.Where(c => c.Id == itemid).FirstOrDefault();
             if (itemFromDb == null)
             {
                 return NotFound();
@@ -100,8 +107,8 @@ namespace SupermarketApp.Controllers
                 return NotFound();
             }
             
-            var cartitems = _db.CartItems.Include("item");
-            var itemFromDb = cartitems.Where(c=> c.Id == itemid).First();
+            var cartitems = _db.CartItems.Include("item").Include("Order");
+            var itemFromDb = cartitems.Where(c=> c.Id == itemid).FirstOrDefault();
             if (itemFromDb == null)
             {
                 return NotFound();
@@ -123,5 +130,40 @@ namespace SupermarketApp.Controllers
             return View(obj);
         }
 
+        public IActionResult Item()
+        {
+            return RedirectToAction("Index", "Item");
+        }
+        public IActionResult Order()
+        {
+            var Order = new Order();
+            var items = _db.CartItems.Include("item").Include("Order");
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            items = items.Where(i => (i.UserID == userId && i.Order == null));
+
+            if (!items.Any())
+            {
+                TempData["success"] = "Your cart is empty. Nothing to order.";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                var price = 0.0;
+                foreach(CartItem c in items)
+                {
+                    c.Order = Order;
+                    price += c.item.Price * c.Quantity;
+                }
+                Order.DateTime= DateTime.Now;
+                Order.UserID = userId;
+                Order.TotalPrice = price;
+                _db.Orders.Add(Order);
+                _db.SaveChanges();
+                TempData["success"] = "Your order for $"+price+" was placed.";
+                RedirectToAction("Index", "Order");
+            }
+            return View();
+        }
     }
 }

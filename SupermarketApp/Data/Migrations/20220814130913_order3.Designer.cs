@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SupermarketApp.Data;
 
@@ -11,9 +12,10 @@ using SupermarketApp.Data;
 namespace SupermarketApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220814130913_order3")]
+    partial class order3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -359,7 +361,7 @@ namespace SupermarketApp.Data.Migrations
             modelBuilder.Entity("SupermarketApp.Models.CartItem", b =>
                 {
                     b.HasOne("SupermarketApp.Models.Order", "Order")
-                        .WithMany("CartItems")
+                        .WithMany()
                         .HasForeignKey("OrderId");
 
                     b.HasOne("SupermarketApp.Models.Item", "item")
@@ -371,11 +373,6 @@ namespace SupermarketApp.Data.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("item");
-                });
-
-            modelBuilder.Entity("SupermarketApp.Models.Order", b =>
-                {
-                    b.Navigation("CartItems");
                 });
 #pragma warning restore 612, 618
         }

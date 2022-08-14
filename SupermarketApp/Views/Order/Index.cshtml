@@ -1,0 +1,52 @@
+﻿@model List<Order>
+@{
+    ViewData["Title"] = "Order History";
+}
+@if (TempData["success"] != null)
+{
+    <p class="text-success">@TempData["success"]</p>
+}
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">Your orders : </h2>
+        </div>
+    </div>
+
+</div>
+@if (!Model.Any())
+{
+    <h3>You haven't placed any orders yet.</h3>
+    <a casp-controller="Order" asp-action="Cart" class="btn btn-primary mx-2">Go your Cart</a>
+}
+else{
+    <ul class="list-unstyled">
+    @foreach(Order o in Model)
+    {
+        <li  style="border-radius:20px; background-color:aliceblue;margin:10px; padding:10px;20px;">
+            <p>
+                <strong>Date : </strong>
+                @o.DateTime.ToShortDateString(), 
+                <strong>Time : </strong>
+                @o.DateTime.ToShortTimeString()
+            </p>
+            <p>
+                <strong>Total Price : </strong>
+                $@o.TotalPrice
+            </p>
+            <p>
+                <strong>Order summary :</strong>
+                <ul>
+                 @foreach(CartItem c in o.CartItems)
+                {
+                   <li>@c.Quantity @c.item.Name</li>
+                }
+                </ul>
+            </p>
+               
+            </li>
+    }
+    </ul>
+
+                    }

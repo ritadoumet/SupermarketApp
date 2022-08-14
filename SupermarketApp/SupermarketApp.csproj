@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-SupermarketApp-4EE6E9CE-BBD1-4E30-BD6F-2421E07F0479</UserSecretsId>
+    <ApplicationIcon>wwwroot\images\shopping-bag.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>

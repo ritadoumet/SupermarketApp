@@ -14,5 +14,7 @@ namespace SupermarketApp.Models
 
         [Range(1,20)]
         public int Quantity { get; set; } = 1;
+
+        public Order? Order { get; set; }
     }
 }
