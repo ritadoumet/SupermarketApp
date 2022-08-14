@@ -128,6 +128,11 @@ namespace SupermarketApp.Controllers
             return View(obj);
         }
 
+        public IActionResult Cart(int? itemid)
+        {
+            return RedirectToAction("Create", "Cart", new { @itemid = itemid });
+        }
+
         [Authorize(Roles = "Admin")]
         //Post
         [HttpPost]

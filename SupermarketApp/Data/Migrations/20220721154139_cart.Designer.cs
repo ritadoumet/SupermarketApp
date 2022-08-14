@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SupermarketApp.Data;
 
@@ -11,9 +12,10 @@ using SupermarketApp.Data;
 namespace SupermarketApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220721154139_cart")]
+    partial class cart
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -226,27 +228,27 @@ namespace SupermarketApp.Data.Migrations
 
             modelBuilder.Entity("SupermarketApp.Models.CartItem", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("CartId")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserID")
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("itemId")
-                        .HasColumnType("int");
+                    b.HasKey("CartId");
 
-                    b.HasKey("Id");
+                    b.HasIndex("ItemId");
 
-                    b.HasIndex("itemId");
-
-                    b.ToTable("CartItems");
+                    b.ToTable("ShoppingCartItems");
                 });
 
             modelBuilder.Entity("SupermarketApp.Models.Item", b =>
@@ -330,13 +332,13 @@ namespace SupermarketApp.Data.Migrations
 
             modelBuilder.Entity("SupermarketApp.Models.CartItem", b =>
                 {
-                    b.HasOne("SupermarketApp.Models.Item", "item")
+                    b.HasOne("SupermarketApp.Models.Item", "Item")
                         .WithMany()
-                        .HasForeignKey("itemId")
+                        .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("item");
+                    b.Navigation("Item");
                 });
 #pragma warning restore 612, 618
         }
